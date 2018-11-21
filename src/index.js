@@ -4,15 +4,7 @@ import './index.scss';
 
 import config from './config';
 
-import eventsCreateModule from './events/create/module';
-import eventsDetailModule from './events/detail/module';
-import eventsEditModule from './events/edit/module';
-import eventsDeleteModule from './events/delete/module';
-import eventsListModule from './events/list/module';
-import eventsFaceModule from './events/face/module';
-
-import surveysCreateModule from './surveys/create/module';
-import surveysPreviewModule from './surveys/preview/module';
+import usersListModule from './users/list/module';
 
 const appDependencies = [
   'ngRoute'
@@ -24,18 +16,20 @@ if (__USE_MOCKS__) {
   console.info('%c____USING FAKE SSO____', 'background: #222; color: #1ff1f5');
 }
 
-appDependencies.push(eventsCreateModule.name);
-appDependencies.push(eventsDetailModule.name);
-appDependencies.push(eventsEditModule.name);
-appDependencies.push(eventsDeleteModule.name);
-appDependencies.push(eventsListModule.name);
-appDependencies.push(eventsFaceModule.name);
-
-appDependencies.push(surveysCreateModule.name);
-appDependencies.push(surveysPreviewModule.name);
+appDependencies.push(usersListModule.name);
 
 angular.module(`${config.NAMESPACE}`, appDependencies)
-  .controller('appCtrl', function() {})
+  .controller('appCtrl', function() {
+    this.appName = config.TITLE;
+    this.routes = [
+      {
+        href: '/users',
+        label: 'Users'
+      }
+    ];
+
+    return this;
+  })
   .constant('DATE_FORMAT_STRING', DATE_FORMAT_STRING)
   .config(function($routeProvider, $locationProvider) {
     $routeProvider.otherwise({redirectTo: config.LANDING_PAGE_URL});

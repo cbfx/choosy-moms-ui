@@ -1,7 +1,7 @@
 import uuid from 'uuid';
 
 import config from './config';
-import Model from './mocks/Model';
+import { default as Model } from './mocks/Gif';
 
 import dataService, {
   API_LIST_KEY,
@@ -14,7 +14,7 @@ import listResponseMock from './mocks/list-response-mock';
 
 export const getListResponseFn = function(method, url, data, headers, params) {
   const hasParams = Object.keys(params).length ? true : false;
-  const filteredItems = listResponseMock.data.items.slice(0);
+  const filteredItems = listResponseMock.data.slice(0);
   const foundItems = filteredItems.filter((item) => {
     return item.id == params[API_LIST_INDEX_KEY];
   });
@@ -47,17 +47,6 @@ export const getListResponseFn = function(method, url, data, headers, params) {
 
 export const getDetailResponseFn = function(method, url, data, headers, params) {
   return getListResponseFn(method, url, data, headers, params);
-};
-
-export const deleteDetailResponseFn = function(method, url, data, headers, params) {
-  const response = [
-    200,
-    {}
-  ];
-
-  console.log(method, url, data, headers, params, response);
-
-  return response;
 };
 
 export const putDetailResponseFn = function(method, url, data, headers, params) {
@@ -116,9 +105,6 @@ export default angular.module(`${config.NAMESPACE}`, dependencies)
 
       $httpBackend.whenRoute('PUT', API_RESOURCE_DETAIL_PATH)
         .respond(putDetailResponseFn);
-
-      $httpBackend.whenRoute('DELETE', API_RESOURCE_DETAIL_PATH)
-        .respond(deleteDetailResponseFn);
 
       $httpBackend.whenRoute('GET', API_RESOURCE_LIST_PATH)
         .respond(getListResponseFn);

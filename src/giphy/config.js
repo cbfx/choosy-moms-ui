@@ -1,7 +1,7 @@
 import config from './../config';
 
 export default {
-  ID: 'giphyAPI',
-  NAMESPACE: `${config.NAMESPACE}.giphyAPI`,
-  TITLE: 'Giphy API'
+  ID: 'giphy',
+  NAMESPACE: `${config.NAMESPACE}.giphy`,
+  TITLE: 'Giphy'
 };
