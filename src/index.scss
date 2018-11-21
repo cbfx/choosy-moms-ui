@@ -1,0 +1,39 @@
+body {
+  padding-top: 50px;
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+
+.page-header {
+  position: relative;
+  border-bottom: none;
+  margin-bottom: 0;
+
+  .page-back-link {
+    position: absolute;
+    top: -25px;
+  }
+}
+
+.control-label {
+  min-height: 34px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  margin-bottom: 0;
+  font-weight: normal;
+  color: #999;
+  text-align: right;
+}
+
+.list-group-item-text {
+  margin-top: 8px;
+
+  p {
+    margin: 0 0 5px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: 850px;
+  }
+}
