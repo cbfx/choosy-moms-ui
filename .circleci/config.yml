@@ -1,0 +1,248 @@
+version: 2
+
+references:
+  container_config_node: &container_config_node
+    docker:
+      - image: circleci/node:9.4.0
+
+  container_config_node_browsers: &container_config_node_browsers
+    docker:
+      - image: circleci/node:9.4.0-browsers
+
+  container_config_python: &container_config_python
+    docker:
+      - image: circleci/python:3.6.1
+
+  project_dir: &project_dir
+    ~/${CIRCLE_PROJECT_REPONAME}
+
+  deploy_environment_variables: &deploy_environment_variables
+    environment:
+      TF_VERSION: 0.11.7
+      TF_LOG: debug
+
+  workspace_root: &workspace_root
+    /tmp/workspace
+
+  attach_workspace: &attach_workspace
+    attach_workspace:
+      at: *workspace_root
+
+  repo_cache_key: &repo_cache_key
+    source-v2-{{ .Branch }}-{{ .Revision }}
+
+  restore_repo: &restore_repo
+    restore_cache:
+      keys:
+        - *repo_cache_key
+
+  npm_cache_key: &npm_cache_key
+    dependency-cache-beta-v2-{{ checksum "yarn.lock" }}
+
+  restore_node_modules: &restore_node_modules
+    restore_cache:
+      keys:
+        - *npm_cache_key
+
+  terraform_cache_key: &terraform_cache_key
+    terraform-cache-v2-0.11.7
+
+  terraform_cache_path: &terraform_cache_path
+    ~/0.11.7
+
+  terraform_working_directory: &terraform_working_directory
+    terraform/
+
+  restore_terraform: &restore_terraform
+    restore_cache:
+      keys:
+        - *terraform_cache_key
+
+  restore_dist_dir: &restore_dist_dir
+    run:
+      name: Restore dist to project dir from workspace
+      command: mv /tmp/workspace/dist .
+
+  make_project_dir: &make_project_dir
+    run:
+      name: Create deploy context directory
+      command: mkdir -p ~/${CIRCLE_PROJECT_REPONAME}
+
+  move_infra_dir: &move_infra_dir
+    run:
+      name: Move the infra directory to project dir
+      command: mv terraform ~/${CIRCLE_PROJECT_REPONAME}
+
+  move_dist_dir: &move_dist_dir
+    run:
+      name: Move dist to project dir from workspace
+      command: mv dist ~/${CIRCLE_PROJECT_REPONAME}
+
+  install_aws_cli: &install_aws_cli
+    run:
+      name: Install AWS cli
+      command: pip install awscli --upgrade --user
+
+  export_awscli_to_path: &export_awscli_to_path
+    run:
+      name: Export awscli to path
+      command: echo 'export PATH=~/.local/bin:$PATH' >> $BASH_ENV
+
+  output_aws_cli_version: &output_aws_cli_version
+    run:
+      name: Output aws version
+      command: aws --version
+
+  output_terraform_version: &output_terraform_version
+    run:
+      name: Output terraform version
+      command: terraform version
+
+  export_terraform_client_to_path: &export_terraform_client_to_path
+    run:
+      name: Export terraform client to path
+      command: echo 'export PATH=~/${TF_VERSION}:$PATH' >> $BASH_ENV
+
+  deploy_job_requirements: &deploy_job_requirements
+    requires:
+      - download_terraform
+      - test_lint
+      - test_unit
+      - build
+
+jobs:
+  checkout_code:
+    <<: *container_config_node
+    steps:
+      - *restore_repo
+      - checkout
+      - save_cache:
+          key: *repo_cache_key
+          paths:
+            - .
+            - .git
+
+  install_dependencies:
+    <<: *container_config_node
+    steps:
+      - checkout
+      - *restore_node_modules
+      - run: yarn install --pure-lockfile
+      - save_cache:
+          key: *npm_cache_key
+          paths:
+            - node_modules
+            - ~/.cache/yarn
+
+  download_terraform:
+    <<: *container_config_node
+    <<: *deploy_environment_variables
+    steps:
+      - *restore_terraform
+      - run: mkdir -p ~/${TF_VERSION}
+      - run: if [[ ! -e ~/${TF_VERSION}/terraform ]]; then wget https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip -O t.zip && unzip t.zip -d ~/${TF_VERSION}; fi
+      - save_cache:
+          key: *terraform_cache_key
+          paths:
+            - *terraform_cache_path
+
+  build:
+    <<: *container_config_node
+    steps:
+      - *attach_workspace
+      - *restore_repo
+      - *restore_node_modules
+      - run:
+          name: Build UI distribution
+          command: yarn run dist
+      - run:
+          name: Move dist directory to temporary workspace
+          command: mv dist /tmp/workspace/
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - dist
+      - store_artifacts:
+          path: /tmp/workspace/dist
+          destination: dist
+
+  test_unit:
+    <<: *container_config_node_browsers
+    steps:
+      - *restore_repo
+      - *restore_node_modules
+      - run:
+          name: Unit test the code
+          command: yarn testOnce
+      - store_artifacts:
+          path: __coverage__
+          destination: __coverage__
+
+  test_lint:
+    <<: *container_config_node
+    steps:
+      - *restore_repo
+      - *restore_node_modules
+      - run:
+          name: Lint the code
+          command: yarn lint
+
+  deploy:
+    <<: *container_config_python
+    <<: *deploy_environment_variables
+    steps:
+      - *attach_workspace
+      - *restore_repo
+      - *restore_node_modules
+      - *restore_terraform
+      - *make_project_dir
+      - *restore_dist_dir
+      - *move_dist_dir
+      - *export_terraform_client_to_path
+      - *output_terraform_version
+      - *install_aws_cli
+      - *export_awscli_to_path
+      - *output_aws_cli_version
+      - run:
+          working_directory: terraform/
+          name: "Initialize Terraform: download providers and setup backend"
+          command: terraform init -reconfigure
+      - run:
+          working_directory: terraform/
+          name: "Plan Terraform: see if changes need to be made"
+          command: |
+            terraform plan -var "stage=prod" \
+              -var "dist_path=~/${CIRCLE_PROJECT_REPONAME}/dist" \
+              -var "service_name=${CIRCLE_PROJECT_REPONAME}" \
+              -var "bucket_name=${CIRCLE_PROJECT_REPONAME}-prod" \
+              -out=tf.tfplan
+      - run:
+          working_directory: terraform/
+          name: "Apply Terraform: provision and update proposed infra"
+          command: terraform apply tf.tfplan
+      - run:
+          name: s3 sync
+          command: aws s3 sync ~/${CIRCLE_PROJECT_REPONAME}/dist/ s3://${CIRCLE_PROJECT_REPONAME}-prod --acl public-read
+
+workflows:
+  version: 2
+
+  branch_deploy:
+    jobs:
+      - checkout_code
+      - download_terraform
+      - install_dependencies
+      - build:
+          requires:
+            - checkout_code
+            - install_dependencies
+      - test_lint:
+          requires:
+            - checkout_code
+            - install_dependencies
+      - test_unit:
+          requires:
+            - checkout_code
+            - install_dependencies
+      - deploy:
+          <<: *deploy_job_requirements
