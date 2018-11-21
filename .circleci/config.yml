@@ -3,11 +3,11 @@ version: 2
 references:
   container_config_node: &container_config_node
     docker:
-      - image: circleci/node:9.4.0
+      - image: circleci/node:10.8.0
 
   container_config_node_browsers: &container_config_node_browsers
     docker:
-      - image: circleci/node:9.4.0-browsers
+      - image: circleci/node:10.8.0-browsers
 
   container_config_python: &container_config_python
     docker:
@@ -18,7 +18,7 @@ references:
 
   deploy_environment_variables: &deploy_environment_variables
     environment:
-      TF_VERSION: 0.11.7
+      TF_VERSION: 0.11.10
       TF_LOG: debug
 
   workspace_root: &workspace_root
@@ -29,7 +29,7 @@ references:
       at: *workspace_root
 
   repo_cache_key: &repo_cache_key
-    source-v2-{{ .Branch }}-{{ .Revision }}
+    source-v1-{{ .Branch }}-{{ .Revision }}
 
   restore_repo: &restore_repo
     restore_cache:
@@ -37,7 +37,7 @@ references:
         - *repo_cache_key
 
   npm_cache_key: &npm_cache_key
-    dependency-cache-beta-v2-{{ checksum "yarn.lock" }}
+    dependency-cache-beta-v1-{{ checksum "package-lock.json" }}
 
   restore_node_modules: &restore_node_modules
     restore_cache:
@@ -45,10 +45,10 @@ references:
         - *npm_cache_key
 
   terraform_cache_key: &terraform_cache_key
-    terraform-cache-v2-0.11.7
+    terraform-cache-v2-0.11.10
 
   terraform_cache_path: &terraform_cache_path
-    ~/0.11.7
+    ~/0.11.10
 
   terraform_working_directory: &terraform_working_directory
     terraform/
@@ -127,12 +127,12 @@ jobs:
     steps:
       - checkout
       - *restore_node_modules
-      - run: yarn install --pure-lockfile
+      - run: npm ci
       - save_cache:
           key: *npm_cache_key
           paths:
             - node_modules
-            - ~/.cache/yarn
+            - ~/.npm
 
   download_terraform:
     <<: *container_config_node
@@ -154,7 +154,7 @@ jobs:
       - *restore_node_modules
       - run:
           name: Build UI distribution
-          command: yarn run dist
+          command: npm run dist
       - run:
           name: Move dist directory to temporary workspace
           command: mv dist /tmp/workspace/
@@ -173,7 +173,7 @@ jobs:
       - *restore_node_modules
       - run:
           name: Unit test the code
-          command: yarn testOnce
+          command: npm run testOnce
       - store_artifacts:
           path: __coverage__
           destination: __coverage__
@@ -185,9 +185,9 @@ jobs:
       - *restore_node_modules
       - run:
           name: Lint the code
-          command: yarn lint
+          command: npm run lint
 
-  deploy:
+  deploy_production:
     <<: *container_config_python
     <<: *deploy_environment_variables
     steps:
@@ -209,6 +209,10 @@ jobs:
           command: terraform init -reconfigure
       - run:
           working_directory: terraform/
+          name: "Select Terraform Workspace: select state context"
+          command: terraform workspace select prod || terraform workspace new prod
+      - run:
+          working_directory: terraform/
           name: "Plan Terraform: see if changes need to be made"
           command: |
             terraform plan -var "stage=prod" \
@@ -223,6 +227,88 @@ jobs:
       - run:
           name: s3 sync
           command: aws s3 sync ~/${CIRCLE_PROJECT_REPONAME}/dist/ s3://${CIRCLE_PROJECT_REPONAME}-prod --acl public-read
+
+  deploy_staging:
+    <<: *container_config_python
+    <<: *deploy_environment_variables
+    steps:
+      - *attach_workspace
+      - *restore_repo
+      - *restore_node_modules
+      - *restore_terraform
+      - *make_project_dir
+      - *restore_dist_dir
+      - *move_dist_dir
+      - *export_terraform_client_to_path
+      - *output_terraform_version
+      - *install_aws_cli
+      - *export_awscli_to_path
+      - *output_aws_cli_version
+      - run:
+          working_directory: terraform/
+          name: "Initialize Terraform: download providers and setup backend"
+          command: terraform init -reconfigure
+      - run:
+          working_directory: terraform/
+          name: "Select Terraform Workspace: select state context"
+          command: terraform workspace select staging || terraform workspace new staging
+      - run:
+          working_directory: terraform/
+          name: "Plan Terraform: see if changes need to be made"
+          command: |
+            terraform plan -var "stage=staging" \
+              -var "dist_path=~/${CIRCLE_PROJECT_REPONAME}/dist" \
+              -var "service_name=${CIRCLE_PROJECT_REPONAME}" \
+              -var "bucket_name=${CIRCLE_PROJECT_REPONAME}-staging" \
+              -out=tf.tfplan
+      - run:
+          working_directory: terraform/
+          name: "Apply Terraform: provision and update proposed infra"
+          command: terraform apply tf.tfplan
+      - run:
+          name: s3 sync
+          command: aws s3 sync ~/${CIRCLE_PROJECT_REPONAME}/dist/ s3://${CIRCLE_PROJECT_REPONAME}-staging --acl public-read
+
+  deploy_custom:
+    <<: *container_config_python
+    <<: *deploy_environment_variables
+    steps:
+      - *attach_workspace
+      - *restore_repo
+      - *restore_node_modules
+      - *restore_terraform
+      - *make_project_dir
+      - *restore_dist_dir
+      - *move_dist_dir
+      - *export_terraform_client_to_path
+      - *output_terraform_version
+      - *install_aws_cli
+      - *export_awscli_to_path
+      - *output_aws_cli_version
+      - run:
+          working_directory: terraform/
+          name: "Initialize Terraform: download providers and setup backend"
+          command: terraform init -reconfigure
+      - run:
+          working_directory: terraform/
+          name: "Select Terraform Workspace: select state context"
+          command: terraform workspace select ${CIRCLE_PR_USERNAME:-$CIRCLE_USERNAME} || terraform workspace new ${CIRCLE_PR_USERNAME:-$CIRCLE_USERNAME}
+      - run:
+          working_directory: terraform/
+          name: "Plan Terraform: see if changes need to be made"
+          command: |
+            terraform plan -var "stage=${CIRCLE_PR_USERNAME:-$CIRCLE_USERNAME}" \
+              -var "dist_path=~/${CIRCLE_PROJECT_REPONAME}/dist" \
+              -var "service_name=${CIRCLE_PROJECT_REPONAME}" \
+              -var "bucket_name=${CIRCLE_PROJECT_REPONAME}-${CIRCLE_PR_USERNAME:-$CIRCLE_USERNAME}" \
+              -out=tf.tfplan
+      - run:
+          working_directory: terraform/
+          name: "Apply Terraform: provision and update proposed infra"
+          command: terraform apply tf.tfplan
+      - run:
+          name: s3 sync
+          command: aws s3 sync ~/${CIRCLE_PROJECT_REPONAME}/dist/ s3://${CIRCLE_PROJECT_REPONAME}-${CIRCLE_PR_USERNAME:-$CIRCLE_USERNAME} --acl public-read
 
 workflows:
   version: 2
@@ -244,5 +330,54 @@ workflows:
           requires:
             - checkout_code
             - install_dependencies
-      - deploy:
+      - deploy_staging:
           <<: *deploy_job_requirements
+          filters:
+            branches:
+              only:
+                - master
+      - deploy_custom:
+          <<: *deploy_job_requirements
+          filters:
+            branches:
+              ignore:
+                - master
+
+  production_deploy:
+    jobs:
+      - checkout_code:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
+      - download_terraform:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
+      - install_dependencies:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
+      - build:
+          requires:
+            - checkout_code
+            - install_dependencies
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
+      - deploy_production:
+          requires:
+            - download_terraform
+            - build
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
