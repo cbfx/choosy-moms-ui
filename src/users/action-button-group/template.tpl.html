@@ -1,0 +1,29 @@
+<div class="btn-group">
+  <a ng-if="false"
+     ng-href="/events/{{::$ctrl.eventId}}/edit"
+     class="btn {{ $ctrl.size || 'btn-sm' }} btn-default">
+    {{ ::$ctrl.text['button.event.edit'] }}
+  </a>
+  <a ng-if="false"
+     ng-href="/events/{{::$ctrl.eventId}}/delete"
+     class="btn {{ $ctrl.size || 'btn-sm' }} btn-danger">
+    {{ ::$ctrl.text['button.event.delete'] }}
+  </a>
+  <button class="btn {{ $ctrl.size || 'btn-sm' }} btn-default"
+          ng-click="$ctrl.goToUrl('/events/' + $ctrl.eventId + '/face/')">
+    {{ ::$ctrl.text['button.event.face'] }}
+  </button>
+  <button class="btn {{ $ctrl.size || 'btn-sm' }} btn-default"
+          ng-click="$ctrl.goToUrl('/surveys/create?eventId=' + $ctrl.eventId + '&mode=' + $ctrl.SLIDESHOW_MODE_TESTING)">
+    {{ ::$ctrl.text['button.event.testSurvey'] }}
+  </button>
+  <button class="btn {{ $ctrl.size || 'btn-sm' }}"
+          ng-class="{
+            'btn-primary': $ctrl.eventEndTimestampInSeconds > $ctrl.nowTimestampInSeconds,
+            'btn-default': $ctrl.eventEndTimestampInSeconds < $ctrl.nowTimestampInSeconds
+          }"
+          ng-click="$ctrl.goToUrl('/surveys/create?eventId=' + $ctrl.eventId)"
+          ng-disabled="$ctrl.eventEndTimestampInSeconds < $ctrl.nowTimestampInSeconds">
+    {{ ::$ctrl.text['button.event.survey'] }}
+  </button>
+</div>

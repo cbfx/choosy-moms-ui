@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html ng-app="300fm">
+  <head lang="en">
+    <base href="/">
+    <meta charset="UTF-8">
+    <title>300fm</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="assets/css/app.css"/>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,700" rel="stylesheet">
+  </head>
+
+  <body ng-controller="appCtrl as $ctrl">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed"
+                  data-toggle="collapse"
+                  data-target="#navbar"
+                  aria-expanded="false"
+                  aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">ReactionLab</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="/events">Events</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <ng-view autoscroll="false"></ng-view>
+
+    <script src="assets/js/vendor.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script>
+      window.ui = window.ui || {};
+      window.ui.version = '##GIT_COMMIT_HASH##';
+      window.ui.builtAt = '##BUILT_AT##';
+    </script>
+  </body>
+</html>

@@ -1,0 +1,163 @@
+<div class="container" ng-show="!$ctrl.data.error.isVisible">
+  <div class="page-header"
+       ng-hide="$ctrl.data.loading.isVisible || $ctrl.data.error.isVisible">
+   <div class="page-back-link">
+     <a href="/events">
+       <i class="fa fa-angle-left"></i>
+       {{ ::$ctrl.text['link.back.to.events'] }}
+     </a>
+   </div>
+   <small class="text-uppercase text-muted sr-only">
+     <strong>
+       {{ ::$ctrl.data.item.id }}
+     </strong>
+   </small>
+    <h1>
+      <events-action-button-group class="pull-right"
+                                  data-event-id="$ctrl.data.item.id"
+                                  data-event-end-timestamp="$ctrl.data.item.endTimestamp">
+      </events-action-button-group>
+      <span ng-show="$ctrl.data.item.name">
+        {{ ::$ctrl.data.item.name }}
+      </span>
+      <span ng-show="!$ctrl.data.item.name && !$ctrl.data.loading.isVisible">
+        {{ ::$ctrl.text['none'] }}
+      </span>
+      <span ng-show="$ctrl.data.loading.isVisible">
+        {{ ::$ctrl.text['loading'] }}
+      </span>
+    </h1>
+  </div>
+
+  <div class="panel panel-section">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        {{ ::$ctrl.text['section.header.details'] }}
+      </h3>
+    </div> <!-- /.panel-heading -->
+    <div class="panel-body">
+      <div class="form-group">
+        <label class="col-sm-3 control-label">
+          {{ ::$ctrl.text['label.id'] }}
+        </label>
+        <div class="col-sm-9">
+          <p class="form-control-static"
+             ng-hide="!$ctrl.data.item.id && $ctrl.loading.isVisible">
+            {{ ::$ctrl.data.item.id }}
+            <span class="text-muted" ng-if="!$ctrl.data.item.id">
+              {{ ::$ctrl.text['none'] }}
+            </span>
+          </p>
+          <p class="form-control-static text-muted"
+             ng-show="!$ctrl.data.item.id && $ctrl.loading.isVisible">
+            {{ ::$ctrl.text['loading'] }}
+          </p>
+        </div>
+      </div> <!-- /.form-group -->
+
+      <div class="form-group">
+        <label class="col-sm-3 control-label">
+          {{ ::$ctrl.text['label.status'] }}
+        </label>
+        <div class="col-sm-9">
+          <p class="form-control-static"
+             ng-hide="!$ctrl.data.item.id && $ctrl.loading.isVisible">
+             <events-status data-event-id="$ctrl.data.item.id"
+                            data-event-begin-timestamp="$ctrl.data.item.beginTimestamp"
+                            data-event-end-timestamp="$ctrl.data.item.endTimestamp">
+             </events-status>
+          </p>
+        </div>
+      </div> <!-- /.form-group -->
+
+      <div class="form-group">
+        <label class="col-sm-3 control-label">
+          {{ ::$ctrl.text['label.address'] }}
+        </label>
+        <div class="col-sm-9">
+          <p class="form-control-static"
+             ng-hide="!$ctrl.data.item.address && $ctrl.loading.isVisible">
+            {{ ::$ctrl.data.item.address }}
+            <span class="text-muted" ng-if="!$ctrl.data.item.address">
+              {{ ::$ctrl.text['none'] }}
+            </span>
+          </p>
+          <p class="form-control-static text-muted"
+             ng-show="!$ctrl.data.item.address && $ctrl.loading.isVisible">
+            {{ ::$ctrl.text['loading'] }}
+          </p>
+        </div>
+      </div> <!-- /.form-group -->
+
+      <div class="form-group">
+        <label class="col-sm-3 control-label">
+          {{ ::$ctrl.text['label.date'] }}
+        </label>
+        <div class="col-sm-9">
+          <p class="form-control-static"
+             ng-hide="(!$ctrl.data.item.beginTimestamp || !$ctrl.data.item.endTimestamp) && $ctrl.loading.isVisible">
+            {{ ::$ctrl.data.item.beginTimestamp | date:$ctrl.DATE_FORMAT_STRING }}
+            -
+            {{ ::$ctrl.data.item.endTimestamp | date:$ctrl.DATE_FORMAT_STRING }}
+            <span class="text-muted"
+                  ng-if="!$ctrl.data.item.beginTimestamp && !$ctrl.data.item.endTimestamp">
+              {{ ::$ctrl.text['none'] }}
+            </span>
+          </p>
+          <p class="form-control-static text-muted"
+             ng-show="(!$ctrl.data.item.beginTimestamp || !$ctrl.data.item.endTimestamp) && $ctrl.loading.isVisible">
+            {{ ::$ctrl.text['loading'] }}
+          </p>
+        </div>
+      </div> <!-- /.form-group -->
+
+    </div> <!-- /.panel-body -->
+  </div> <!-- /.panel.panel-section -->
+
+  <div class="panel panel-section">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        Images
+      </h3>
+    </div> <!-- /.panel-heading -->
+    <div class="panel-body">
+      <table class="table table-condensed">
+        <thead>
+          <tr>
+            <th>Image URL</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in $ctrl.images.items track by item.imageUrl">
+            <td>
+              <a ng-href="{{item.imageUrl}}">
+                {{ ::item.imageUrl }}
+              </a>
+            </td>
+          </tr>
+        </tbody>
+        <tbody ng-show="!$ctrl.images.items.length">
+          <tr>
+            <td colspan="3">
+              <div class="container text-center text-muted"
+                   ng-show="!$ctrl.images.items.length && !$ctrl.images.loading.isVisible">
+                <h4>No images yet</h4>
+                <p>Start shootin', partner!</p>
+              </div>
+              <div class="container text-center text-muted"
+                   ng-show="$ctrl.images.loading.isVisible">
+                <i class="fa fa-spinner fa-spin"></i>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div> <!-- /.panel-body -->
+  </div> <!-- /.panel.panel-section -->
+
+</div> <!-- /.container -->
+<div class="container text-center" ng-show="$ctrl.data.error.isVisible">
+  <h1>Something went wrong</h1>
+  <p>We couldn't find your page. Sorry.</p>
+</div>
