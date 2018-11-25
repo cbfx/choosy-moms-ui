@@ -8,18 +8,6 @@ describe(`${module.name} controller`, function() {
   let $rootScope;
   let $scope;
 
-  let EventsAPIDataServiceMock;
-  let eventsListDeferred;
-
-  beforeEach(function() {
-    EventsAPIDataServiceMock = jasmine.createSpyObj('EventsAPIDataService', ['query']);
-
-    EventsAPIDataServiceMock.query.and.callFake(function() {
-      eventsListDeferred = createDeferred();
-      return {$promise: eventsListDeferred.promise};
-    });
-  });
-
   beforeEach(function() {
     const scope = {};
 
@@ -28,7 +16,6 @@ describe(`${module.name} controller`, function() {
       $scope = $rootScope.$new();
 
       controllerInstance = createController(controller, scope, {
-        EventsAPIDataService: EventsAPIDataServiceMock,
         DATE_FORMAT_STRING: DATE_FORMAT_STRING
       });
 

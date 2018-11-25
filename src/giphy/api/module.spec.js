@@ -53,7 +53,7 @@ describe(`${module.name} module`, function() {
   });
 
   it('[GET]: query a detail response', function() {
-    params[API_LIST_INDEX_KEY] = listResponseMock.data.items[0].id;
+    params[API_LIST_INDEX_KEY] = listResponseMock.data[0].id;
 
     const response = getDetailResponseFn(method, url, data, headers, params);
 

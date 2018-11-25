@@ -3,17 +3,10 @@ import component from './component';
 
 import angularMoment from 'angular-moment';
 
-import eventsApiModule from './../api/module';
-import eventsActionButtonGroupModule from './../action-button-group/module';
-import eventsStatusModule from './../status/module';
-
 export default angular.module(`${config.NAMESPACE}`, [
   'ngRoute',
   'angularMoment',
-  'mgcrea.ngStrap.tooltip',
-  eventsApiModule.name,
-  eventsActionButtonGroupModule.name,
-  eventsStatusModule.name
+  'mgcrea.ngStrap.tooltip'
 ])
   .component(config.COMPONENT_NAME, component)
   .config(function($routeProvider) {

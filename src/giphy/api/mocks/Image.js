@@ -106,7 +106,8 @@ export function getDefaultSchema() {
       url: 'http://media2.giphy.com/media/FiGiRei2ICzzG/giphy_s.gif',
       width: '500',
       height: '176'
-    };
+    }
+  };
 };
 
 export default class Model extends BaseModel {

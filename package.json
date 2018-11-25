@@ -1,14 +1,14 @@
 {
-  "name": "300fm-ui",
+  "name": "choosy-moms-ui",
   "version": "0.2.51",
-  "description": "300fm-ui",
+  "description": "choosy-moms-ui",
   "main": "index.js",
   "author": "rackspace",
-  "repository": "https://github.com/cbfx/300fm-ui",
+  "repository": "https://github.com/cbfx/choosy-moms-ui",
   "license": "MIT",
   "engines": {
-    "node": "9.4.0",
-    "npm": "5.6.0"
+    "node": "10.8.0",
+    "npm": "6.2.0"
   },
   "config": {
     "devserver": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js",

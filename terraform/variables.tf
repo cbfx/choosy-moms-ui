@@ -5,7 +5,7 @@ variable "ui_domain" {
 
 variable "aws_region" {
   type = "string"
-  default = "us-east-2"
+  default = "us-east-1"
 }
 
 variable "bucket_name" {
@@ -26,5 +26,5 @@ variable "stage" {
 
 locals {
   isProduction = "${var.stage == "prod" ? 1 : 0}"
-  isCustomStage = "${var.stage == "prod" || var.stage == "dev" ? 0 : 1}"
+  isCustomStage = "${var.stage == "prod" || var.stage == "staging" ? 0 : 1}"
 }
