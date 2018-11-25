@@ -1,5 +1,5 @@
 data "aws_route53_zone" "domain" {
-  name  = "${local.isCustomStage ? var.ui_domain : module.ui_deploy.host_name}."
+  name  = "${local.isProduction ? module.ui_deploy.host_name : var.ui_domain}."
 }
 
 resource "aws_route53_record" "custom_domain_record" {

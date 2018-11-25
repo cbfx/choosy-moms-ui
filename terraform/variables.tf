@@ -26,5 +26,4 @@ variable "stage" {
 
 locals {
   isProduction = "${var.stage == "prod" ? 1 : 0}"
-  isCustomStage = "${var.stage == "prod" || var.stage == "staging" ? 0 : 1}"
 }
