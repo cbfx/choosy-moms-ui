@@ -18,6 +18,7 @@ variable "dist_path" {
 
 variable "service_name" {
   type = "string"
+  default = "choosy_moms_ui"
 }
 
 variable "stage" {
@@ -25,5 +26,5 @@ variable "stage" {
 }
 
 locals {
-  isProduction = "${var.stage == "prod" ? 1 : 0}"
+  is_production = "${var.stage == "prod" ? 1 : 0}"
 }
