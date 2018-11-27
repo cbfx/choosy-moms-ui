@@ -36,7 +36,7 @@ export default function(DATE_FORMAT_STRING, GiphyAPIDataService, $location) {
         console.log(res);
         this.error.isVisible = false;
         this.gifs = this.gifs.concat(res.data);
-        this.pagination = res.pagination
+        this.pagination = res.pagination;
 
         return res;
       }, (err) => {
