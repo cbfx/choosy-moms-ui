@@ -30,7 +30,7 @@ export function getDefaultSchema() {
   };
 };
 
-export default class Model extends BaseModel {
+export default class Gif extends BaseModel {
   constructor(options = {}) {
     super(options, getDefaultSchema);
   }

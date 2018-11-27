@@ -29,7 +29,7 @@ export default function($resource) {
         isArray: false
       },
       search: {
-        url: `${API_LIST_KEY}/search`,
+        url: `${API_RESOURCE_LIST_PATH}/search`,
         method: 'GET'
       }
     }

@@ -70,6 +70,6 @@ describe(`${module.name} module`, function() {
     expect(whenRouteMock.respond).toHaveBeenCalledWith(jasmine.any(Function));
     expect(response[0]).toBe(200);
     expect(response[1]).toEqual(jasmine.any(Object));
-    expect(response[1].data.items.length).toBeGreaterThan(0);
+    expect(response[1].data.length).toBeGreaterThan(0);
   });
 });

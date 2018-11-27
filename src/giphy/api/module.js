@@ -24,18 +24,14 @@ export const getListResponseFn = function(method, url, data, headers, params) {
     response = [
       foundItems.length ? 200 : 400,
       {
-        data: {
-          items: foundItems
-        }
+        data: foundItems
       }
     ];
   } else {
     response = [
       200,
       {
-        data: {
-          items: filteredItems
-        }
+        data: filteredItems
       }
     ];
   }
@@ -99,6 +95,10 @@ export default angular.module(`${config.NAMESPACE}`, dependencies)
     if (__USE_MOCKS__) {
       console.log(`[MOCK] Registering ${config.TITLE.split(' ').join('')}DataService...`);
       console.log(`[MOCK] ${config.TITLE} Mocks Enabled...`);
+
+
+      $httpBackend.whenRoute('GET', `${API_RESOURCE_LIST_PATH}/search`)
+        .respond(getListResponseFn);
 
       $httpBackend.whenRoute('GET', API_RESOURCE_DETAIL_PATH)
         .respond(getDetailResponseFn);
