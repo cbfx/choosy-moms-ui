@@ -1,12 +1,15 @@
+import './style.scss';
 import config from './config';
 import component from './component';
 
 import angularMoment from 'angular-moment';
+import giphyApiModule from './../../giphy/api/module';
 
 export default angular.module(`${config.NAMESPACE}`, [
   'ngRoute',
   'angularMoment',
-  'mgcrea.ngStrap.tooltip'
+  'mgcrea.ngStrap.tooltip',
+  giphyApiModule.name
 ])
   .component(config.COMPONENT_NAME, component)
   .config(function($routeProvider) {

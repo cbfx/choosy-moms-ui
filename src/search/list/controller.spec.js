@@ -8,6 +8,12 @@ describe(`${module.name} controller`, function() {
   let $rootScope;
   let $scope;
 
+  let GiphyAPIDataServiceMock;
+
+  beforeEach(function() {
+    GiphyAPIDataServiceMock = jasmine.createSpyObj('GiphyAPIDataService', ['search']);
+  });
+
   beforeEach(function() {
     const scope = {};
 
@@ -16,7 +22,8 @@ describe(`${module.name} controller`, function() {
       $scope = $rootScope.$new();
 
       controllerInstance = createController(controller, scope, {
-        DATE_FORMAT_STRING: DATE_FORMAT_STRING
+        DATE_FORMAT_STRING: DATE_FORMAT_STRING,
+        GiphyAPIDataService: GiphyAPIDataServiceMock
       });
 
       controllerInstance.$onInit();

@@ -1,7 +1,7 @@
 import config from './../config';
 
 export default {
-  ID: 'users',
+  ID: 'search',
   NAMESPACE: `${config.NAMESPACE}.search`,
   TITLE: 'Search'
 };
