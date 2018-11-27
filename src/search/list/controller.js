@@ -19,7 +19,7 @@ export default function(DATE_FORMAT_STRING, GiphyAPIDataService) {
       }).finally(() => {
         console.log('finally');
       });
-  }
+  };
 
   this.$onInit = () => {
 
