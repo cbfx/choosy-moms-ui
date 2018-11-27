@@ -1,7 +1,46 @@
 body {
-  padding-top: 50px;
   font-family: 'IBM Plex Sans', sans-serif;
+  background-color: #fff;
+  padding: 100px;
 }
+
+.brand-logo {
+  width: 54px;
+  height: 64px;
+  display: block;
+  background-image: url('./images/peanut-butter-icon.png');
+}
+
+.navbar-header {
+  height: 100px;
+  float: left;
+}
+
+.nav {
+  &.navbar-nav {
+    &.navbar-right {
+      float: right !important;
+    }
+
+    & > li > a {
+      font-size: 2.25rem;
+    }
+  }
+
+  li {
+    margin-top: 20px;
+
+    a {
+      color: #666;
+
+      &:hover {
+        text-decoration: none;
+        background-color: transparent;
+      }
+    }
+  }
+}
+
 
 .page-header {
   position: relative;
@@ -33,7 +72,5 @@ body {
 }
 
 @media (min-width: 1200px) {
-  .container {
-    width: 850px;
-  }
+
 }

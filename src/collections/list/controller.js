@@ -3,7 +3,8 @@ export default function(DATE_FORMAT_STRING) {
 
   this.text = {};
 
-  this.$onInit = () => {};
+  this.$onInit = () => {
+  };
 
   this.$onChanges = () => {};
 

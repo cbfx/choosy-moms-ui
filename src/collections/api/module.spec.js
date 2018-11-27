@@ -52,16 +52,16 @@ describe(`${module.name} module`, function() {
     expect(module.name).toBe(config.NAMESPACE);
   });
 
-  // it('[GET]: query a detail response', function() {
-  //   params[API_LIST_INDEX_KEY] = listResponseMock.data[0].id;
-  //
-  //   const response = getDetailResponseFn(method, url, data, headers, params);
-  //
-  //   expect($httpBackendMock.whenRoute).toHaveBeenCalledWith('GET', API_RESOURCE_DETAIL_PATH);
-  //   expect(whenRouteMock.respond).toHaveBeenCalledWith(jasmine.any(Function));
-  //   expect(response[0]).toBe(200);
-  //   expect(response[1]).toEqual(jasmine.any(Object));
-  // });
+  it('[GET]: query a detail response', function() {
+    params[API_LIST_INDEX_KEY] = listResponseMock.data.items[0].id;
+
+    const response = getDetailResponseFn(method, url, data, headers, params);
+
+    expect($httpBackendMock.whenRoute).toHaveBeenCalledWith('GET', API_RESOURCE_DETAIL_PATH);
+    expect(whenRouteMock.respond).toHaveBeenCalledWith(jasmine.any(Function));
+    expect(response[0]).toBe(200);
+    expect(response[1]).toEqual(jasmine.any(Object));
+  });
 
   it('[GET]: query a list response', function() {
     const response = getListResponseFn(method, url, data, headers, params);
@@ -70,6 +70,6 @@ describe(`${module.name} module`, function() {
     expect(whenRouteMock.respond).toHaveBeenCalledWith(jasmine.any(Function));
     expect(response[0]).toBe(200);
     expect(response[1]).toEqual(jasmine.any(Object));
-    expect(response[1].data.length).toBeGreaterThan(0);
+    expect(response[1].data.items.length).toBeGreaterThan(0);
   });
 });

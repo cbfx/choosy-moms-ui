@@ -32,7 +32,7 @@
     "angular-cookies": "1.6.3",
     "angular-formly": "8.4.1",
     "angular-formly-templates-bootstrap": "6.4.0",
-    "angular-jwt": "0.0.9",
+    "angular-jwt": "0.1.10",
     "angular-mocks": "1.6.3",
     "angular-moment": "1.0.0-beta.6",
     "angular-resource": "1.6.3",
@@ -44,12 +44,7 @@
     "autoprefixer-loader": "3.2.0",
     "bootstrap": "3.3.7",
     "bootstrap-additions": "0.3.1",
-    "font-awesome": "4.7.0"
-  },
-  "browser": {
-    "vendor": "./vendor/index.js"
-  },
-  "devDependencies": {
+    "font-awesome": "4.7.0",
     "aws-sdk": "2.265.1",
     "chromedriver": "2.35.0",
     "babel-core": "6.26.0",
@@ -99,5 +94,8 @@
     "url-loader": "0.6.2",
     "webpack": "3.6.0",
     "webpack-dev-server": "2.4.1"
+  },
+  "browser": {
+    "vendor": "./vendor/index.js"
   }
 }

@@ -1,0 +1,17 @@
+<span>
+  <a ng-if="!$root.isAuthenticated"
+     href="#"
+     ng-click="$ctrl.login()">
+    Login
+  </a>
+  <span ng-if="$root.isAuthenticated">
+    Howdy, <strong>{{$ctrl.payload.email}}</strong>
+
+    &nbsp;&nbsp;&nbsp;
+
+    <a href="#"
+       ng-click="$ctrl.logout()">
+      Logout
+    </a>
+  </span>
+</span>

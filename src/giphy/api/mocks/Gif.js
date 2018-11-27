@@ -2,8 +2,6 @@ import BaseModel from './../../../BaseModel';
 import uuid from 'uuid';
 
 import Image from './Image';
-import Meta from './Meta';
-import Pagination from './Pagination';
 
 export function getDefaultSchema() {
   return {
@@ -24,13 +22,11 @@ export function getDefaultSchema() {
     import_datetime: '2013-08-01 12:41:48',
     trending_datetime: '2013-08-01 12:41:48',
     images: new Image(),
-    title: 'Happy Dancing GIF',
-    meta: new Meta(),
-    pagination: new Pagination()
+    title: 'Happy Dancing GIF'
   };
 };
 
-export default class Model extends BaseModel {
+export default class Gif extends BaseModel {
   constructor(options = {}) {
     super(options, getDefaultSchema);
   }

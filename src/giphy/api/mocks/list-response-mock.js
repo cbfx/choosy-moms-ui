@@ -1,4 +1,6 @@
 import Gif from './Gif';
+import Meta from './Meta';
+import Pagination from './Pagination';
 
 const items = [
   new Gif(),
@@ -8,5 +10,7 @@ const items = [
 ];
 
 export default {
-  data: items
+  data: items,
+  meta: new Meta(),
+  pagination: new Pagination()
 };

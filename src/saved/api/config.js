@@ -4,7 +4,7 @@ export default {
   NAMESPACE: `${config.NAMESPACE}.api`,
   TITLE: `${config.TITLE} API`,
   API: {
-    basePath: '/giphy',
+    basePath: '/saved',
     version: 'v1',
     prefix: ''
   }

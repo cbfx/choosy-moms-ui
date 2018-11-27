@@ -1,7 +1,7 @@
 import uuid from 'uuid';
 
 import config from './config';
-import { default as Model } from './mocks/Gif';
+import { default as Model } from './mocks/Collection';
 
 import dataService, {
   API_LIST_KEY,
@@ -13,17 +13,32 @@ import dataService, {
 import listResponseMock from './mocks/list-response-mock';
 
 export const getListResponseFn = function(method, url, data, headers, params) {
-  const filteredItems = listResponseMock.data.slice(0);
+  const hasParams = Object.keys(params).length ? true : false;
+  const filteredItems = listResponseMock.data.items.slice(0);
+  const foundItems = filteredItems.filter((item) => {
+    return item.id == params[API_LIST_INDEX_KEY];
+  });
   let response;
 
-  response = [
-    200,
-    {
-      data: filteredItems,
-      meta: listResponseMock.meta,
-      pagination: listResponseMock.pagination
-    }
-  ];
+  if (hasParams) {
+    response = [
+      foundItems.length ? 200 : 400,
+      {
+        data: {
+          items: foundItems
+        }
+      }
+    ];
+  } else {
+    response = [
+      200,
+      {
+        data: {
+          items: filteredItems
+        }
+      }
+    ];
+  }
 
   console.log(method, url, data, headers, params, response);
 
@@ -85,12 +100,8 @@ export default angular.module(`${config.NAMESPACE}`, dependencies)
       console.log(`[MOCK] Registering ${config.TITLE.split(' ').join('')}DataService...`);
       console.log(`[MOCK] ${config.TITLE} Mocks Enabled...`);
 
-
-      $httpBackend.whenRoute('GET', `${API_RESOURCE_LIST_PATH}/search`)
-        .respond(getListResponseFn);
-
-      // $httpBackend.whenRoute('GET', API_RESOURCE_DETAIL_PATH)
-      //   .respond(getDetailResponseFn);
+      $httpBackend.whenRoute('GET', API_RESOURCE_DETAIL_PATH)
+        .respond(getDetailResponseFn);
 
       $httpBackend.whenRoute('PUT', API_RESOURCE_DETAIL_PATH)
         .respond(putDetailResponseFn);
