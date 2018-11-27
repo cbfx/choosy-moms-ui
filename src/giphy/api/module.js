@@ -19,7 +19,9 @@ export const getListResponseFn = function(method, url, data, headers, params) {
   response = [
     200,
     {
-      data: filteredItems
+      data: filteredItems,
+      meta: listResponseMock.meta,
+      pagination: listResponseMock.pagination
     }
   ];
 
