@@ -18,6 +18,7 @@ variable "dist_path" {
 
 variable "service_name" {
   type = "string"
+  default = "choosy_moms_ui"
 }
 
 variable "stage" {
@@ -25,5 +26,15 @@ variable "stage" {
 }
 
 locals {
-  isProduction = "${var.stage == "prod" ? 1 : 0}"
+  is_production = "${var.stage == "prod" ? 1 : 0}"
+}
+
+locals {
+  ui_url = "${var.ui_domain}"
+}
+
+locals {
+  deploy_domain = "${local.is_production ? local.ui_url : format("%s.%s", var.stage, local.ui_url)}"
+  cert_domain   = "${local.is_production ? local.ui_url : format("*.%s", local.ui_url)}"
+  domain_zone   = "${var.ui_domain}"
 }
