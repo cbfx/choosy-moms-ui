@@ -11,6 +11,8 @@ describe(`${module.name} controller`, function() {
   let GiphyAPIDataServiceMock;
   let GiphyAPIDataServiceQueryDeferred;
 
+  let $locationMock;
+
   beforeEach(function() {
     GiphyAPIDataServiceMock = jasmine.createSpyObj('GiphyAPIDataService', [
       'search'
@@ -31,10 +33,12 @@ describe(`${module.name} controller`, function() {
     inject(function($injector) {
       $rootScope = $injector.get('$rootScope');
       $scope = $rootScope.$new();
+      $locationMock = $injector.get('$location');
 
       controllerInstance = createController(controller, scope, {
         DATE_FORMAT_STRING: DATE_FORMAT_STRING,
-        GiphyAPIDataService: GiphyAPIDataServiceMock
+        GiphyAPIDataService: GiphyAPIDataServiceMock,
+        $location: $locationMock
       });
 
       controllerInstance.$onInit();

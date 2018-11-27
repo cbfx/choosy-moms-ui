@@ -2,7 +2,7 @@
 
   <div class="row search-list-search-bar">
     <div class="col-md-12">
-      <form ng-submit="$ctrl.search($ctrl.query)">
+      <form ng-submit="$ctrl.search($ctrl.query, 0)">
         <input type="text"
                class="form-control input-lg"
                placeholder="Search for gifs via Giphy.com"
@@ -20,9 +20,35 @@
            ng-attr-src="{{gif.images.fixed_height_small.url}}" />
     </div>
 
-    <div class="col-md-12 text-center search-list-zero-state" ng-show="!$ctrl.gifs.length">
+    <div class="col-md-12 text-center search-list-loading"
+         ng-show="!$ctrl.gifs.length && !$ctrl.loading.isVisible && !$ctrl.error.isVisible">
       <span class="h2">Start searching for your favorite gifs...</span>
       <p>We'll show you gifs from all over the internet</p>
+    </div>
+
+    <div class="col-md-12 text-center search-list-zero-state"
+         ng-show="$ctrl.loading.isVisible">
+      <p>
+        <i class="fa fa-spinner fa-spin"></i>
+        Loading...
+      </p>
+    </div>
+
+    <div class="col-md-12 text-center search-list-error"
+         ng-show="$ctrl.error.isVisible">
+      <p>
+        <i class="fa fa-exclamation-triangle text-danger"></i>
+        Something went wrong...
+      </p>
+    </div>
+
+    <div class="col-md-12 text-center search-list-load-more"
+         ng-show="$ctrl.gifs.length < $ctrl.pagination.total_count">
+         <button type="button"
+                 class="btn btn-default"
+                 ng-click="$ctrl.loadMore()">
+           Load More...
+         </button>
     </div>
   </div>
 
