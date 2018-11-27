@@ -1,9 +1,9 @@
 <span>
-  <button ng-if="!$root.isAuthenticated"
-          type="button"
-          ng-click="$ctrl.login()">
+  <a ng-if="!$root.isAuthenticated"
+     href="#"
+     ng-click="$ctrl.login()">
     Login
-  </button>
+  </a>
   <span ng-if="$root.isAuthenticated">
     Howdy, <strong>{{$ctrl.payload.email}}</strong>
 
