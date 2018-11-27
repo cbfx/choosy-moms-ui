@@ -6,6 +6,7 @@ import config from './config';
 
 import authModule from './auth/module';
 import searchListModule from './search/list/module';
+import savedListModule from './saved/list/module';
 
 const appDependencies = [
   'ngRoute'
@@ -19,6 +20,7 @@ if (__USE_MOCKS__) {
 
 appDependencies.push(authModule.name);
 appDependencies.push(searchListModule.name);
+appDependencies.push(savedListModule.name);
 
 angular.module(`${config.NAMESPACE}`, appDependencies)
   .controller('appCtrl', function() {
