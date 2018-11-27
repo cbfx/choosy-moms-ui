@@ -18,6 +18,10 @@ body {
 
 .nav {
   &.navbar-nav {
+    &.navbar-right {
+      float: right !important;
+    }
+
     & > li > a {
       font-size: 2.25rem;
     }
