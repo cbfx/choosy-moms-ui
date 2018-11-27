@@ -26,12 +26,7 @@
           </form>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
-              {{$ctrl.appName}}
-              <button ng-if="!$root.isAuthenticated">Log In</button>
-              <button ng-if="$root.isAuthenticated">Log Out</button>
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                Howdy, cbfx <span class="caret"></span>
-              </a>
+              <auth-badge></auth-badge>
             </li>
           </ul>
         </div>
