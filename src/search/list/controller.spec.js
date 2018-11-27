@@ -9,9 +9,20 @@ describe(`${module.name} controller`, function() {
   let $scope;
 
   let GiphyAPIDataServiceMock;
+  let GiphyAPIDataServiceQueryDeferred;
 
   beforeEach(function() {
-    GiphyAPIDataServiceMock = jasmine.createSpyObj('GiphyAPIDataService', ['search']);
+    GiphyAPIDataServiceMock = jasmine.createSpyObj('GiphyAPIDataService', [
+      'search'
+    ]);
+
+    GiphyAPIDataServiceMock.search.and.callFake(function() {
+      GiphyAPIDataServiceQueryDeferred = createDeferred();
+
+      return {
+        '$promise': GiphyAPIDataServiceQueryDeferred.promise
+      };
+    });
   });
 
   beforeEach(function() {

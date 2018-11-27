@@ -2,11 +2,11 @@
 
   <div class="row search-list-search-bar">
     <div class="col-md-12">
-      <form ng-submit="$ctrl.search()">
+      <form ng-submit="$ctrl.search($ctrl.query)">
         <input type="text"
                class="form-control"
                placeholder="Search for gifs via Giphy.com"
-               ng-model="$ctrl.model">
+               ng-model="$ctrl.query">
         <button type="submit" class="btn btn-default sr-only">
           Search
         </button>
