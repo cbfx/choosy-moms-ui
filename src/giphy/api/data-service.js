@@ -1,7 +1,7 @@
 import config from './config';
 
 export const API_BASE_PATH = `${config.API.basePath}`;
-export const API_FULL_PATH = `${config.API.hostName}/${config.API.version}`;
+export const API_FULL_PATH = `${API_BASE_PATH}/${config.API.version}`;
 
 export const API_LIST_KEY = 'gifs';
 export const API_LIST_INDEX_KEY = 'gif_id';

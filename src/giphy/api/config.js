@@ -4,8 +4,7 @@ export default {
   NAMESPACE: `${config.NAMESPACE}.api`,
   TITLE: `${config.TITLE} API`,
   API: {
-    hostName: 'https://api.giphy.com',
-    basePath: '',
+    basePath: '/giphy',
     version: 'v1',
     prefix: ''
   }
