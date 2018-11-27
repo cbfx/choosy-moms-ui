@@ -13,28 +13,15 @@ import dataService, {
 import listResponseMock from './mocks/list-response-mock';
 
 export const getListResponseFn = function(method, url, data, headers, params) {
-  const hasParams = Object.keys(params).length ? true : false;
   const filteredItems = listResponseMock.data.slice(0);
-  const foundItems = filteredItems.filter((item) => {
-    return item.id == params[API_LIST_INDEX_KEY];
-  });
   let response;
 
-  if (hasParams) {
-    response = [
-      foundItems.length ? 200 : 400,
-      {
-        data: foundItems
-      }
-    ];
-  } else {
-    response = [
-      200,
-      {
-        data: filteredItems
-      }
-    ];
-  }
+  response = [
+    200,
+    {
+      data: filteredItems
+    }
+  ];
 
   console.log(method, url, data, headers, params, response);
 
@@ -100,8 +87,8 @@ export default angular.module(`${config.NAMESPACE}`, dependencies)
       $httpBackend.whenRoute('GET', `${API_RESOURCE_LIST_PATH}/search`)
         .respond(getListResponseFn);
 
-      $httpBackend.whenRoute('GET', API_RESOURCE_DETAIL_PATH)
-        .respond(getDetailResponseFn);
+      // $httpBackend.whenRoute('GET', API_RESOURCE_DETAIL_PATH)
+      //   .respond(getDetailResponseFn);
 
       $httpBackend.whenRoute('PUT', API_RESOURCE_DETAIL_PATH)
         .respond(putDetailResponseFn);
