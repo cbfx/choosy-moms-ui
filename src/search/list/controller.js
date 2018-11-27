@@ -1,11 +1,15 @@
-export default function(DATE_FORMAT_STRING, GiphyAPIDataService) {
+export default function(DATE_FORMAT_STRING, GiphyAPIDataService, $location) {
   this.DATE_FORMAT_STRING = DATE_FORMAT_STRING;
 
   this.text = {};
 
   this.gifs = [];
 
+  this.query = '';
+
   this.search = (query = '') => {
+    $location.search({q: query});
+
     GiphyAPIDataService.search({
       q: query
     }).$promise
@@ -22,7 +26,7 @@ export default function(DATE_FORMAT_STRING, GiphyAPIDataService) {
   };
 
   this.$onInit = () => {
-
+    this.query = $location.search().q;
   };
 
   this.$onChanges = () => {};

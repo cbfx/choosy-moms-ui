@@ -16,6 +16,7 @@ export default angular.module(`${config.NAMESPACE}`, [
     $routeProvider
       .when(`${config.ROUTE.href}`, {
         template: `${config.COMPONENT_TAG}`,
-        title: `${config.TITLE}`
+        title: `${config.TITLE}`,
+        reloadOnSearch: false
       });
   });
