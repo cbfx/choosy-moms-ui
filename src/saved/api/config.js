@@ -5,7 +5,6 @@ export default {
   TITLE: `${config.TITLE} API`,
   API: {
     basePath: '/saved',
-    version: 'v1',
     prefix: ''
   }
 };

@@ -1,9 +1,11 @@
+import './style.scss';
+
 import config from './config';
 import component from './component';
 
-import authModule from './../module';
+import savedApiModule from './../api/module';
 
 export default angular.module(`${config.NAMESPACE}`, [
-  authModule.name
+  savedApiModule.name
 ])
   .component(config.COMPONENT_NAME, component);

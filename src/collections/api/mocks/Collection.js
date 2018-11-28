@@ -3,6 +3,9 @@ import uuid from 'uuid';
 
 export function getDefaultSchema() {
   return {
+    collectionId: uuid.v4(),
+    name: 'Some Collection',
+    userId: uuid.v4()
   };
 };
 

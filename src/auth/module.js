@@ -1,13 +1,13 @@
 import config from './config';
-import badgeModule from './badge/module';
+import service from './service';
 
 export const AUTH_TOKEN_ID = 'token';
 
 export default angular.module(`${config.NAMESPACE}`, [
   'angular-jwt',
-  'angular-storage',
-  badgeModule.name
+  'angular-storage'
 ])
+  .factory(`${config.ID}Service`, service)
   .config(function($httpProvider, jwtOptionsProvider) {
     jwtOptionsProvider.config({
       unauthenticatedRedirectPath: '/login',

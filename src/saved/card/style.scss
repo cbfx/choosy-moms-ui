@@ -1,0 +1,20 @@
+.saved-card-container {
+  margin: 2px 1px;
+  display: inline-block;
+  position: relative;
+  background-color: #f5f5f5;
+
+  .saved-card-favorite {
+
+  }
+
+  .saved-card-favorite-button {
+    background-color: transparent;
+  }
+
+  .saved-card-favorite-icon {
+    &.text-warning {
+      color: yellow;
+    }
+  }
+}

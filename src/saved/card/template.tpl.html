@@ -1,0 +1,50 @@
+<div class="saved-card-container">
+  <div class="saved-card-body">
+    <img ng-attr-src="{{$ctrl.gif.images.fixed_height_small.url}}" />
+  </div>
+  <div ng-show="$root.isAuthenticated" class="saved-card-footer text-right">
+    <div class="saved-card-favorite">
+      <button ng-show="$ctrl.favorite.isFavorited"
+              type="button"
+              class="btn btn-text saved-card-favorite-button"
+              data-template-url="add-to-collections-popover.tpl.html"
+              data-auto-close="1"
+              data-placement="top"
+              bs-popover
+              ng-disabled="$ctrl.loading.isVisible ||
+                           $ctrl.error.isVisible ||
+                           $ctrl.submitting.isVisible">
+        <span>Save to collection</span>
+      </button>
+      <button class="btn btn-text saved-card-favorite-button"
+              type="button"
+              ng-click="$ctrl.toggle()"
+              ng-disabled="$ctrl.loading.isVisible ||
+                           $ctrl.error.isVisible ||
+                           $ctrl.submitting.isVisible">
+        <i class="fa saved-card-favorite-icon" ng-class="{
+          'fa-spin fa-spinner text-muted': $ctrl.loading.isVisible,
+          'fa-bookmark-o': !$ctrl.favorite.isFavorited && !$ctrl.loading.isVisible,
+          'fa-bookmark': $ctrl.favorite.isFavorited && !$ctrl.loading.isVisible
+        }" aria-hidden="true"></i>
+        <span class="sr-only">
+          {{ $ctrl.favorite.isFavorited ? 'Unsave' : 'Save' }}
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script type="text/ng-template" id="add-to-collections-popover.tpl.html">
+  <div class="popover" tabindex="-1">
+    <div class="arrow"></div>
+    <div class="popover-content">
+      <collections-card data-user-id="$ctrl.userId"
+                        data-gif-id="$ctrl.gif.id"
+                        data-collections="$ctrl.collections"
+                        data-collection-id="$ctrl.favorite.data.collectionId"
+                        data-on-success="$hide(); $ctrl.favorite.set(res.data)">
+      </collections-card>
+    </div>
+  </div>
+</script>
