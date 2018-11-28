@@ -74,6 +74,8 @@ export default function(SavedAPIDataService) {
   };
 
   this.$onInit = () => {
+    this.loading.isVisible = true;
+
     SavedAPIDataService.get({
       gifId: this.gif.id
     }).$promise
@@ -87,7 +89,7 @@ export default function(SavedAPIDataService) {
         return err;
       })
       .finally(() => {
-
+        this.loading.isVisible = false;
       });
   };
 

@@ -86,8 +86,8 @@ export default angular.module(`${config.NAMESPACE}`, dependencies)
       $httpBackend.whenRoute('GET', API_RESOURCE_DETAIL_PATH)
         .respond(getDetailResponseFn);
 
-      // $httpBackend.whenRoute('PUT', API_RESOURCE_DETAIL_PATH)
-      //   .respond(putDetailResponseFn);
+      $httpBackend.whenRoute('PUT', API_RESOURCE_DETAIL_PATH)
+        .respond(putDetailResponseFn);
 
       $httpBackend.whenRoute('GET', API_RESOURCE_LIST_PATH)
         .respond(getListResponseFn);
