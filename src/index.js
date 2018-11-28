@@ -26,20 +26,23 @@ appDependencies.push(searchListModule.name);
 appDependencies.push(savedListModule.name);
 
 angular.module(`${config.NAMESPACE}`, appDependencies)
-  .controller('appCtrl', function() {
+  .controller('appCtrl', function(authManager) {
     this.appName = config.TITLE;
     this.routes = [
       {
         name: 'Search',
         path: '/search',
         icon: 'fa-search'
-      },
-      {
+      }
+    ];
+
+    if (authManager.isAuthenticated()) {
+      this.routes.push({
         name: 'Favorites',
         path: '/favorites',
         icon: 'fa-bookmark'
-      }
-    ];
+      });
+    }
 
     return this;
   })
