@@ -2,7 +2,7 @@
   <div class="saved-card-body">
     <img ng-attr-src="{{$ctrl.gif.images.fixed_height_small.url}}" />
   </div>
-  <div ng-show="$ctrl.userId" class="saved-card-footer text-right">
+  <div ng-show="$root.isAuthenticated" class="saved-card-footer text-right">
     <div class="saved-card-favorite">
       <button ng-show="$ctrl.favorite.isFavorited"
               type="button"
