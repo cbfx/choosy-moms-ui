@@ -30,7 +30,10 @@ export default function($resource) {
       },
       search: {
         url: `${API_RESOURCE_LIST_PATH}/search`,
-        method: 'GET'
+        method: 'GET',
+        params: {
+          rating: 'g'
+        }
       }
     }
   );
