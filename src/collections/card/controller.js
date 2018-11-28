@@ -60,6 +60,10 @@ export default function(SavedAPIDataService, CollectionsAPIDataService) {
   this.categorySelection = {
     selected: 'select', // select, input
     toggle: function() {
+      if (!this.collections.length) {
+        this.selected = 'input';
+      }
+
       this.selected = this.selected === 'select' ? 'input' : 'select';
     }
   };
@@ -67,6 +71,10 @@ export default function(SavedAPIDataService, CollectionsAPIDataService) {
   this.$onInit = () => {
     if (this.collectionId) {
       this.selectedCollectionId = this.collectionId;
+    }
+
+    if (!this.collections.length) {
+      this.selected = 'input';
     }
   };
 
