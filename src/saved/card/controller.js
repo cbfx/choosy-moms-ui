@@ -32,7 +32,7 @@ export default function(SavedAPIDataService) {
     return this[this.favorite.isFavorited ? 'unsave' : 'save']();
   };
 
-  this.save = ({collectionId = null}) => {
+  this.save = () => {
     this.submitting.isVisible = true;
 
     return SavedAPIDataService.save({
@@ -78,7 +78,9 @@ export default function(SavedAPIDataService) {
       gifId: this.gif.id
     }).$promise
       .then((res) => {
-        this.favorite.set(res.data.items[0]);
+        if (res.data.items.length) {
+          this.favorite.set(res.data.items[0]);
+        }
 
         return res;
       }, (err) => {
