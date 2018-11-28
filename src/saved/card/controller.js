@@ -37,6 +37,7 @@ export default function(SavedAPIDataService, authManager) {
 
     return SavedAPIDataService.save({
       gifId: this.gif.id,
+      gifUrl: this.gif.url,
       gifPreviewUrl: this.gif.images.fixed_height_small.url,
       collectionId: null
     }).$promise

@@ -1,9 +1,11 @@
 <div class="saved-card-container">
   <div class="saved-card-body">
-    <img ng-attr-src="{{$ctrl.gif.images.fixed_height_small.url}}" />
+    <a ng-attr-href="{{$ctrl.gif.url}}" target="_blank">
+      <img ng-attr-src="{{$ctrl.gif.images.fixed_height_small.url}}" />
+    </a>
   </div>
-  <div ng-show="$root.isAuthenticated" class="saved-card-footer text-right">
-    <div class="saved-card-favorite">
+  <div class="saved-card-footer text-right">
+    <span class="saved-card-favorite" ng-show="$root.isAuthenticated">
       <button ng-show="$ctrl.favorite.isFavorited"
               type="button"
               class="btn btn-text saved-card-favorite-button"
@@ -31,7 +33,7 @@
           {{ $ctrl.favorite.isFavorited ? 'Unsave' : 'Save' }}
         </span>
       </button>
-    </div>
+    </span>
   </div>
 </div>
 
