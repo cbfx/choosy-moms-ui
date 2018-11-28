@@ -14,7 +14,7 @@
     <select ng-show="$ctrl.categorySelection.selected === 'select'"
             class="form-control input-sm"
             ng-model="$ctrl.selectedCollectionId"
-            ng-options="collection.collectionId as collection.name for collection in $ctrl.collections track by $index"
+            ng-options="collection.collectionId as collection.name for collection in $ctrl.collections"
             ng-change="$ctrl.onChangeCollection()">
     </select>
 

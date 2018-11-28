@@ -24,7 +24,14 @@ export default function(SavedAPIDataService, CollectionsAPIDataService) {
     }).$promise
       .then((res) => {
         if (this.onSuccess) {
-          this.onSuccess({res});
+          this.onSuccess({
+            res: {
+              data: {
+                gifId: this.gifId,
+                collectionId: this.selectedCollectionId
+              }
+            }
+          });
         }
 
         return res;
@@ -72,9 +79,6 @@ export default function(SavedAPIDataService, CollectionsAPIDataService) {
     if (this.collectionId) {
       this.selectedCollectionId = this.collectionId;
     }
-
-    this.selectedCollectionId = 'd83432e7-d494-498c-baa4-17d920c9c765';
-
 
     if (!this.collections) {
       this.selected = 'input';
