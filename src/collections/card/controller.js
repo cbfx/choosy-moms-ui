@@ -59,8 +59,8 @@ export default function(SavedAPIDataService, CollectionsAPIDataService) {
 
   this.categorySelection = {
     selected: 'select', // select, input
-    toggle: function() {
-      if (!(this.collections || []).length) {
+    toggle: function(collections = []) {
+      if (!collections) {
         this.selected = 'input';
       }
 
@@ -73,12 +73,21 @@ export default function(SavedAPIDataService, CollectionsAPIDataService) {
       this.selectedCollectionId = this.collectionId;
     }
 
-    if (!(this.collections || []).length) {
+    this.selectedCollectionId = 'd83432e7-d494-498c-baa4-17d920c9c765';
+
+
+    if (!this.collections) {
       this.selected = 'input';
     }
   };
 
-  this.$onChanges = () => {};
+  this.$onChanges = (changes) => {
+    const collectionId = changes.collectionId;
+
+    if (collectionId && collectionId.currentValue) {
+      this.selectedCollectionId = collectionId.currentValue;
+    }
+  };
 
   return this;
 };
