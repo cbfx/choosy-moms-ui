@@ -10,8 +10,11 @@ describe(`${module.name} controller`, function() {
 
   let GiphyAPIDataServiceMock;
   let GiphyAPIDataServiceQueryDeferred;
-
+  let CollectionsAPIDataServiceMock;
+  let CollectionsAPIDataServiceQueryDeferred;
+  let authServiceMock;
   let $locationMock;
+  let $qMock;
 
   beforeEach(function() {
     GiphyAPIDataServiceMock = jasmine.createSpyObj('GiphyAPIDataService', [
@@ -28,17 +31,45 @@ describe(`${module.name} controller`, function() {
   });
 
   beforeEach(function() {
+    CollectionsAPIDataServiceMock = jasmine.createSpyObj('CollectionsAPIDataService', [
+      'query'
+    ]);
+
+    CollectionsAPIDataServiceMock.query.and.callFake(function() {
+      CollectionsAPIDataServiceQueryDeferred = createDeferred();
+
+      return {
+        '$promise': CollectionsAPIDataServiceQueryDeferred.promise
+      };
+    });
+  });
+
+  beforeEach(function() {
+    authServiceMock = jasmine.createSpyObj('authService', [
+      'getUserId'
+    ]);
+
+    authServiceMock.getUserId.and.callFake(function() {
+      return 1234;
+    });
+  });
+
+  beforeEach(function() {
     const scope = {};
 
     inject(function($injector) {
       $rootScope = $injector.get('$rootScope');
       $scope = $rootScope.$new();
       $locationMock = $injector.get('$location');
+      $qMock = $injector.get('$q');
 
       controllerInstance = createController(controller, scope, {
         DATE_FORMAT_STRING: DATE_FORMAT_STRING,
         GiphyAPIDataService: GiphyAPIDataServiceMock,
-        $location: $locationMock
+        CollectionsAPIDataService: CollectionsAPIDataServiceMock,
+        $location: $locationMock,
+        authService: authServiceMock,
+        $q: $qMock
       });
 
       controllerInstance.$onInit();

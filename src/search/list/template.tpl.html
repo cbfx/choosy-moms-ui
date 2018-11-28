@@ -16,8 +16,11 @@
 
   <div class="row search-list-gif-container">
     <div class="col-md-12" ng-show="$ctrl.gifs.length">
-      <img ng-repeat="gif in $ctrl.gifs"
-           ng-attr-src="{{gif.images.fixed_height_small.url}}" />
+      <saved-card ng-repeat="gif in $ctrl.gifs"
+                  data-gif="gif"
+                  data-collections="$ctrl.collections"
+                  data-user-id="$ctrl.userId">
+      </saved-card>
     </div>
 
     <div class="col-md-12 text-center search-list-loading"

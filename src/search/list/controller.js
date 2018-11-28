@@ -1,4 +1,5 @@
-export default function(DATE_FORMAT_STRING, GiphyAPIDataService, $location) {
+export default function(DATE_FORMAT_STRING, GiphyAPIDataService, $location,
+                        CollectionsAPIDataService, authService, $q) {
   this.DATE_FORMAT_STRING = DATE_FORMAT_STRING;
 
   this.text = {};
@@ -33,7 +34,6 @@ export default function(DATE_FORMAT_STRING, GiphyAPIDataService, $location) {
       count: 30
     }).$promise
       .then((res) => {
-        console.log(res);
         this.error.isVisible = false;
         this.gifs = this.gifs.concat(res.data);
         this.pagination = res.pagination;
@@ -50,9 +50,20 @@ export default function(DATE_FORMAT_STRING, GiphyAPIDataService, $location) {
 
   this.$onInit = () => {
     this.query = $location.search().q;
+    this.userId = authService.getUserId();
 
     if (this.query) {
       this.search(this.query);
+    }
+
+    if (this.userId) {
+      $q.all([
+        CollectionsAPIDataService.query().$promise
+      ]).then(([collectionResponse]) => {
+        this.collections = collectionResponse.data.items;
+
+        return [collectionResponse];
+      });
     }
   };
 
