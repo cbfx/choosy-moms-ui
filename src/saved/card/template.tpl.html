@@ -16,7 +16,9 @@
               ng-disabled="$ctrl.loading.isVisible ||
                            $ctrl.error.isVisible ||
                            $ctrl.submitting.isVisible">
-        <span>Save to collection</span>
+        <span>
+          {{ $ctrl.favorite.data.collectionId ? $ctrl.getCollectionNameById($ctrl.favorite.data.collectionId ) : 'Save to collection'}}
+        </span>
       </button>
       <button class="btn btn-text saved-card-favorite-button"
               type="button"

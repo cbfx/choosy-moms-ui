@@ -74,6 +74,12 @@ export default function(SavedAPIDataService, authManager) {
       });
   };
 
+  this.getCollectionNameById = (id) => {
+    return this.collections.find((collection) => {
+      return collection.collectionId == id;
+    }).name;
+  };
+
   this.$onInit = () => {
     this.loading.isVisible = true;
 
