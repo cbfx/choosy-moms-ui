@@ -1,3 +1,21 @@
-<div class="container">
-  Search!
+<div class="saved-card-container">
+  <div class="saved-card-body">
+    <img ng-attr-src="{{$ctrl.gif.images.fixed_height_small.url}}" />
+  </div>
+  <div class="saved-card-footer text-right">
+    <div class="saved-card-favorite">
+      <button class="btn btn-text saved-card-favorite-button"
+              ng-click="$ctrl.toggle()"
+              ng-disabled="$ctrl.loading.isVisible ||
+                           $ctrl.error.isVisible ||
+                           $ctrl.submitting.isVisible">
+        <i class="fa saved-card-favorite-icon" ng-class="{
+          'fa-spin fa-spinning text-muted': $ctrl.loading.isVisible,
+          'fa-bookmark-o': !$ctrl.favorite.isFavorited,
+          'fa-bookmark': $ctrl.favorite.isFavorited
+        }" aria-hidden="true"></i>
+        <span class="sr-only">Save</span>
+      </button>
+    </div>
+  </div>
 </div>

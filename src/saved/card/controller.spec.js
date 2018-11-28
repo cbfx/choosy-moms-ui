@@ -1,12 +1,47 @@
 import module from './module';
 import controller from './controller';
 
-import { DATE_FORMAT_STRING } from './../../index';
-
 describe(`${module.name} controller`, function() {
   let controllerInstance;
   let $rootScope;
   let $scope;
+
+  let SavedAPIDataServiceMock;
+  let SavedAPIDataServiceGetDeferred;
+  let SavedAPIDataServiceSaveDeferred;
+  let SavedAPIDataServiceDeleteDeferred;
+
+  beforeEach(function() {
+    SavedAPIDataServiceMock = jasmine.createSpyObj('SavedAPIDataService', [
+      'get',
+      'save',
+      'delete'
+    ]);
+
+    SavedAPIDataServiceMock.get.and.callFake(function() {
+      SavedAPIDataServiceGetDeferred = createDeferred();
+
+      return {
+        '$promise': SavedAPIDataServiceGetDeferred.promise
+      };
+    });
+
+    SavedAPIDataServiceMock.save.and.callFake(function() {
+      SavedAPIDataServiceSaveDeferred = createDeferred();
+
+      return {
+        '$promise': SavedAPIDataServiceSaveDeferred.promise
+      };
+    });
+
+    SavedAPIDataServiceMock.delete.and.callFake(function() {
+      SavedAPIDataServiceDeleteDeferred = createDeferred();
+
+      return {
+        '$promise': SavedAPIDataServiceDeleteDeferred.promise
+      };
+    });
+  });
 
   beforeEach(function() {
     const scope = {};
@@ -16,7 +51,11 @@ describe(`${module.name} controller`, function() {
       $scope = $rootScope.$new();
 
       controllerInstance = createController(controller, scope, {
-        DATE_FORMAT_STRING: DATE_FORMAT_STRING
+        SavedAPIDataService: SavedAPIDataServiceMock
+      }, {
+        gif: {
+          id: 1
+        }
       });
 
       controllerInstance.$onInit();

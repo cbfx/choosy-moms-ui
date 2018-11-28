@@ -3,6 +3,10 @@ import template from './template.tpl.html';
 
 export default {
   controller,
-  bindings: {},
+  bindings: {
+    collections: '<',
+    userId: '<',
+    gif: '<'
+  },
   template: template
 };

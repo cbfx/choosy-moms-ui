@@ -3,6 +3,10 @@ import uuid from 'uuid';
 
 export function getDefaultSchema() {
   return {
+    gifId: '12345',
+    gifPreviewUrl: 'https://www.someurl.com',
+    userId: uuid.v4(),
+    collectionId: null
   };
 };
 
