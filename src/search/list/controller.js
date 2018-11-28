@@ -1,5 +1,5 @@
 export default function(DATE_FORMAT_STRING, GiphyAPIDataService, $location,
-                        CollectionsAPIDataService, authService, $q) {
+                        CollectionsAPIDataService, authService, $q, authManager) {
   this.DATE_FORMAT_STRING = DATE_FORMAT_STRING;
 
   this.text = {};
@@ -56,7 +56,7 @@ export default function(DATE_FORMAT_STRING, GiphyAPIDataService, $location,
       this.search(this.query);
     }
 
-    if (this.userId) {
+    if (authManager.isAuthenticated()) {
       $q.all([
         CollectionsAPIDataService.query().$promise
       ]).then(([collectionResponse]) => {

@@ -15,6 +15,17 @@ describe(`${module.name} controller`, function() {
   let authServiceMock;
   let $locationMock;
   let $qMock;
+  let authManagerMock;
+
+  beforeEach(function() {
+    authManagerMock = jasmine.createSpyObj('authManager', [
+      'isAuthenticated'
+    ]);
+
+    authManagerMock.isAuthenticated.and.callFake(function() {
+      return true;
+    });
+  });
 
   beforeEach(function() {
     GiphyAPIDataServiceMock = jasmine.createSpyObj('GiphyAPIDataService', [
@@ -69,7 +80,8 @@ describe(`${module.name} controller`, function() {
         CollectionsAPIDataService: CollectionsAPIDataServiceMock,
         $location: $locationMock,
         authService: authServiceMock,
-        $q: $qMock
+        $q: $qMock,
+        authManager: authManagerMock
       });
 
       controllerInstance.$onInit();
