@@ -1,6 +1,5 @@
-import { AUTH_TOKEN_ID } from './../module';
-
-export default function($location, jwtHelper) {
+export default function($location, jwtHelper, PRODUCTION_URL,
+                        authService) {
   this.text = {};
 
   this.login = () => {
@@ -8,13 +7,13 @@ export default function($location, jwtHelper) {
   };
 
   this.logout = () => {
-    localStorage.removeItem(AUTH_TOKEN_ID);
+    authService.clearToken();
     window.location.href = `${this.getLoginServiceUrl()}/leave`;
   };
 
   this.getLoginServiceUrl = () => {
     const host = $location.host();
-    const prodUrl = 'gif.cbfx.net';
+    const prodUrl = PRODUCTION_URL;
     const isProduction = host == prodUrl;
     let stage;
 
@@ -28,8 +27,7 @@ export default function($location, jwtHelper) {
   };
 
   this.$onInit = () => {
-    const token = localStorage.getItem(AUTH_TOKEN_ID);
-    this.payload = jwtHelper.decodeToken(token);
+    this.payload = authService.decodeToken();
   };
 
   this.$onChanges = () => {};
