@@ -44,6 +44,7 @@ export default function(SavedAPIDataService, CollectionsAPIDataService) {
     }).$promise
       .then((res) => {
         this.collections.push(res.data);
+        this.collectionId = res.data.collectionId;
         this.selectedCollectionId = res.data.collectionId;
 
         return this.onChangeCollection();
@@ -65,7 +66,7 @@ export default function(SavedAPIDataService, CollectionsAPIDataService) {
 
   this.$onInit = () => {
     if (this.collectionId) {
-      this.selectedCollectionId = collectionId;
+      this.selectedCollectionId = this.collectionId;
     }
   };
 
