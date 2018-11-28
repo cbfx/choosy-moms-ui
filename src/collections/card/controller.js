@@ -81,7 +81,7 @@ export default function(SavedAPIDataService, CollectionsAPIDataService) {
     }
 
     if (!this.collections) {
-      this.selected = 'input';
+      this.categorySelection.selected = 'input';
     }
   };
 
