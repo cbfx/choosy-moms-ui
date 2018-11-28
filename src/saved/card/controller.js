@@ -1,4 +1,4 @@
-export default function(SavedAPIDataService) {
+export default function(SavedAPIDataService, authManager) {
   this.text = {};
 
   this.loading = {
@@ -76,21 +76,23 @@ export default function(SavedAPIDataService) {
   this.$onInit = () => {
     this.loading.isVisible = true;
 
-    SavedAPIDataService.get({
-      gifId: this.gif.id
-    }).$promise
-      .then((res) => {
-        if (res.data.items.length) {
-          this.favorite.set(res.data.items[0]);
-        }
+    if (authManager.isAuthenticated()) {
+      SavedAPIDataService.get({
+        gifId: this.gif.id
+      }).$promise
+        .then((res) => {
+          if (res.data.items.length) {
+            this.favorite.set(res.data.items[0]);
+          }
 
-        return res;
-      }, (err) => {
-        return err;
-      })
-      .finally(() => {
-        this.loading.isVisible = false;
-      });
+          return res;
+        }, (err) => {
+          return err;
+        })
+        .finally(() => {
+          this.loading.isVisible = false;
+        });
+    }
   };
 
   this.$onChanges = () => {};

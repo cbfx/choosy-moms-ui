@@ -11,6 +11,18 @@ describe(`${module.name} controller`, function() {
   let SavedAPIDataServiceSaveDeferred;
   let SavedAPIDataServiceDeleteDeferred;
 
+  let authManagerMock;
+
+  beforeEach(function() {
+    authManagerMock = jasmine.createSpyObj('authManager', [
+      'isAuthenticated'
+    ]);
+
+    authManagerMock.isAuthenticated.and.callFake(function() {
+      return true;
+    });
+  });
+
   beforeEach(function() {
     SavedAPIDataServiceMock = jasmine.createSpyObj('SavedAPIDataService', [
       'get',
@@ -51,7 +63,8 @@ describe(`${module.name} controller`, function() {
       $scope = $rootScope.$new();
 
       controllerInstance = createController(controller, scope, {
-        SavedAPIDataService: SavedAPIDataServiceMock
+        SavedAPIDataService: SavedAPIDataServiceMock,
+        authManager: authManagerMock
       }, {
         gif: {
           id: 1
