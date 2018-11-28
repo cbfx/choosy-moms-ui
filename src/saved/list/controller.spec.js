@@ -10,7 +10,10 @@ describe(`${module.name} controller`, function() {
 
   let SavedAPIDataServiceMock;
   let SavedAPIDataServiceQueryDeferred;
+  let CollectionsAPIDataServiceMock;
+  let CollectionsAPIDataServiceQueryDeferred;
   let $locationMock;
+  let $qMock;
   let authManagerMock;
 
   beforeEach(function() {
@@ -38,17 +41,34 @@ describe(`${module.name} controller`, function() {
   });
 
   beforeEach(function() {
+    CollectionsAPIDataServiceMock = jasmine.createSpyObj('CollectionsAPIDataService', [
+      'query'
+    ]);
+
+    CollectionsAPIDataServiceMock.query.and.callFake(function() {
+      CollectionsAPIDataServiceQueryDeferred = createDeferred();
+
+      return {
+        '$promise': CollectionsAPIDataServiceQueryDeferred.promise
+      };
+    });
+  });
+
+  beforeEach(function() {
     const scope = {};
 
     inject(function($injector) {
       $rootScope = $injector.get('$rootScope');
       $scope = $rootScope.$new();
       $locationMock = $injector.get('$location');
+      $qMock = $injector.get('$q');
 
       controllerInstance = createController(controller, scope, {
         SavedAPIDataService: SavedAPIDataServiceMock,
         $location: $locationMock,
-        authManager: authManagerMock
+        authManager: authManagerMock,
+        CollectionsAPIDataService: CollectionsAPIDataServiceMock,
+        $q: $qMock
       });
 
       controllerInstance.$onInit();

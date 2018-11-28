@@ -1,11 +1,8 @@
-export default function(SavedAPIDataService, authManager, $location) {
-  this.DATE_FORMAT_STRING = DATE_FORMAT_STRING;
-
+export default function(SavedAPIDataService, authManager, $location, $q,
+                        CollectionsAPIDataService) {
   this.text = {};
 
   this.gifs = [];
-
-  this.query = '';
 
   this.error = {
     isVisible: false
@@ -21,7 +18,7 @@ export default function(SavedAPIDataService, authManager, $location) {
     SavedAPIDataService.query({}).$promise
       .then((res) => {
         this.error.isVisible = false;
-        this.gifs = res.data
+        this.gifs = res.data.items;
 
         return res;
       }, (err) => {
@@ -36,6 +33,14 @@ export default function(SavedAPIDataService, authManager, $location) {
   this.$onInit = () => {
     if (authManager.isAuthenticated()) {
       this.query();
+
+      $q.all([
+        CollectionsAPIDataService.query().$promise
+      ]).then(([collectionResponse]) => {
+        this.collections = collectionResponse.data.items;
+
+        return [collectionResponse];
+      });
     } else {
       $location.path('/');
     }
