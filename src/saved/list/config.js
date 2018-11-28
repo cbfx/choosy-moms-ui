@@ -7,6 +7,6 @@ export default {
   NAMESPACE: `${config.NAMESPACE}.list`,
   TITLE: `${config.TITLE} List`,
   ROUTE: {
-    href: `/${config.ID}`
+    href: `/favorites`
   }
 };

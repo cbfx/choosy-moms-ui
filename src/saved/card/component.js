@@ -6,7 +6,9 @@ export default {
   bindings: {
     collections: '<',
     userId: '<',
-    gif: '<'
+    gifId: '<',
+    gifPreviewUrl: '<',
+    gifUrl: '<'
   },
   template: template
 };

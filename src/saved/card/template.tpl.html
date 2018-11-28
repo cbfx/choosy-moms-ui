@@ -1,20 +1,24 @@
 <div class="saved-card-container">
   <div class="saved-card-body">
-    <img ng-attr-src="{{$ctrl.gif.images.fixed_height_small.url}}" />
+    <a ng-attr-href="{{$ctrl.gifUrl}}" target="_blank">
+      <img ng-attr-src="{{$ctrl.gifPreviewUrl}}" />
+    </a>
   </div>
-  <div ng-show="$root.isAuthenticated" class="saved-card-footer text-right">
-    <div class="saved-card-favorite">
+  <div class="saved-card-footer text-right">
+    <span class="saved-card-favorite" ng-show="$root.isAuthenticated">
       <button ng-show="$ctrl.favorite.isFavorited"
               type="button"
               class="btn btn-text saved-card-favorite-button"
               data-template-url="add-to-collections-popover.tpl.html"
               data-auto-close="1"
-              data-placement="top"
+              data-placement="top auto"
               bs-popover
               ng-disabled="$ctrl.loading.isVisible ||
                            $ctrl.error.isVisible ||
                            $ctrl.submitting.isVisible">
-        <span>Save to collection</span>
+        <span>
+          {{ $ctrl.favorite.data.collectionId ? 'Saved to ' + $ctrl.getCollectionNameById($ctrl.favorite.data.collectionId) : 'Save to collection'}}
+        </span>
       </button>
       <button class="btn btn-text saved-card-favorite-button"
               type="button"
@@ -31,7 +35,7 @@
           {{ $ctrl.favorite.isFavorited ? 'Unsave' : 'Save' }}
         </span>
       </button>
-    </div>
+    </span>
   </div>
 </div>
 
@@ -40,7 +44,7 @@
     <div class="arrow"></div>
     <div class="popover-content">
       <collections-card data-user-id="$ctrl.userId"
-                        data-gif-id="$ctrl.gif.id"
+                        data-gif-id="$ctrl.gifId"
                         data-collections="$ctrl.collections"
                         data-collection-id="$ctrl.favorite.data.collectionId"
                         data-on-success="$hide(); $ctrl.favorite.set(res.data)">

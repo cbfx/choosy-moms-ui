@@ -1,3 +1,37 @@
 <div class="container">
-  Search!
+
+  <div class="row saved-list-gif-container">
+    <div class="col-md-12" ng-show="$ctrl.gifs.length">
+      <saved-card ng-repeat="gif in $ctrl.gifs"
+                  data-gif-id="gif.gifId"
+                  data-gif-preview-url="gif.gifPreviewUrl"
+                  data-gif-url="gif.gifUrl"
+                  data-collections="$ctrl.collections"
+                  data-user-id="$ctrl.userId">
+      </saved-card>
+    </div>
+
+    <div class="col-md-12 text-center saved-list-zero-state"
+         ng-show="!$ctrl.gifs.length && !$ctrl.loading.isVisible && !$ctrl.error.isVisible">
+      <span class="h2">You haven't saved any gifs yet!</span>
+      <p>Head over to the <a href="/search">search</a> page to start collecting.</p>
+    </div>
+
+    <div class="col-md-12 text-center saved-list-loading"
+         ng-show="$ctrl.loading.isVisible">
+      <p>
+        <i class="fa fa-spinner fa-spin"></i>
+        Loading...
+      </p>
+    </div>
+
+    <div class="col-md-12 text-center saved-list-error"
+         ng-show="$ctrl.error.isVisible">
+      <p>
+        <i class="fa fa-exclamation-triangle text-danger"></i>
+        Something went wrong...
+      </p>
+    </div>
+  </div>
+
 </div>

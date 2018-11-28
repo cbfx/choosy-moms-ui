@@ -24,7 +24,14 @@ export default function(SavedAPIDataService, CollectionsAPIDataService) {
     }).$promise
       .then((res) => {
         if (this.onSuccess) {
-          this.onSuccess({res});
+          this.onSuccess({
+            res: {
+              data: {
+                gifId: this.gifId,
+                collectionId: this.selectedCollectionId
+              }
+            }
+          });
         }
 
         return res;
@@ -44,6 +51,7 @@ export default function(SavedAPIDataService, CollectionsAPIDataService) {
     }).$promise
       .then((res) => {
         this.collections.push(res.data);
+        this.collectionId = res.data.collectionId;
         this.selectedCollectionId = res.data.collectionId;
 
         return this.onChangeCollection();
@@ -58,18 +66,32 @@ export default function(SavedAPIDataService, CollectionsAPIDataService) {
 
   this.categorySelection = {
     selected: 'select', // select, input
-    toggle: function() {
+    toggle: function(collections = []) {
+      if (!collections) {
+        this.selected = 'input';
+      }
+
       this.selected = this.selected === 'select' ? 'input' : 'select';
     }
   };
 
   this.$onInit = () => {
     if (this.collectionId) {
-      this.selectedCollectionId = collectionId;
+      this.selectedCollectionId = this.collectionId;
+    }
+
+    if (!this.collections) {
+      this.selected = 'input';
     }
   };
 
-  this.$onChanges = () => {};
+  this.$onChanges = (changes) => {
+    const collectionId = changes.collectionId;
+
+    if (collectionId && collectionId.currentValue) {
+      this.selectedCollectionId = collectionId.currentValue;
+    }
+  };
 
   return this;
 };

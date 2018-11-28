@@ -3,7 +3,7 @@
     <label>Save to</label>
     <button type="button"
             class="btn btn-link btn-sm pull-right"
-            ng-click="$ctrl.categorySelection.toggle()">
+            ng-click="$ctrl.categorySelection.toggle($ctrl.collections)">
       <i class="fa" ng-class="{
         'fa-plus': $ctrl.categorySelection.selected === 'select',
         'fa-angle-left': $ctrl.categorySelection.selected === 'input'
@@ -13,8 +13,8 @@
   <div class="collections-card-body">
     <select ng-show="$ctrl.categorySelection.selected === 'select'"
             class="form-control input-sm"
-            ng-options="collection.collectionId as collection.name for collection in $ctrl.collections track by collection.collectionId"
             ng-model="$ctrl.selectedCollectionId"
+            ng-options="collection.collectionId as collection.name for collection in $ctrl.collections"
             ng-change="$ctrl.onChangeCollection()">
     </select>
 

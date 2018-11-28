@@ -5,7 +5,7 @@ body {
 }
 
 .brand-logo {
-  width: 54px;
+  width: 74px;
   height: 64px;
   display: block;
   background-image: url('./images/peanut-butter-icon.png');
@@ -18,12 +18,17 @@ body {
 
 .nav {
   &.navbar-nav {
+    .text-muted {
+      color: #ccc;
+    }
+
     &.navbar-right {
+      padding-top: 15px;
       float: right !important;
     }
 
     & > li > a {
-      font-size: 2.25rem;
+      font-size: 2.0rem;
     }
   }
 
