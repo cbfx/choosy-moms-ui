@@ -11,6 +11,9 @@ describe(`${module.name} controller`, function() {
   let SavedAPIDataServiceSaveDeferred;
   let SavedAPIDataServiceDeleteDeferred;
 
+  let CollectionsAPIDataServiceMock;
+  let CollectionsAPIDataServiceQueryDeferred;
+
   beforeEach(function() {
     SavedAPIDataServiceMock = jasmine.createSpyObj('SavedAPIDataService', [
       'get',
@@ -44,6 +47,20 @@ describe(`${module.name} controller`, function() {
   });
 
   beforeEach(function() {
+    CollectionsAPIDataServiceMock = jasmine.createSpyObj('CollectionsAPIDataService', [
+      'save'
+    ]);
+
+    CollectionsAPIDataServiceMock.save.and.callFake(function() {
+      CollectionsAPIDataServiceQueryDeferred = createDeferred();
+
+      return {
+        '$promise': CollectionsAPIDataServiceQueryDeferred.promise
+      };
+    });
+  });
+
+  beforeEach(function() {
     const scope = {};
 
     inject(function($injector) {
@@ -51,7 +68,8 @@ describe(`${module.name} controller`, function() {
       $scope = $rootScope.$new();
 
       controllerInstance = createController(controller, scope, {
-        SavedAPIDataService: SavedAPIDataServiceMock
+        SavedAPIDataService: SavedAPIDataServiceMock,
+        CollectionsAPIDataService: CollectionsAPIDataServiceMock
       }, {
         gif: {
           id: 1
