@@ -2,7 +2,7 @@
   <div class="saved-card-body">
     <img ng-attr-src="{{$ctrl.gif.images.fixed_height_small.url}}" />
   </div>
-  <div class="saved-card-footer text-right">
+  <div ng-show="$ctrl.userId" class="saved-card-footer text-right">
     <div class="saved-card-favorite">
       <button class="btn btn-text saved-card-favorite-button"
               ng-click="$ctrl.toggle()"
