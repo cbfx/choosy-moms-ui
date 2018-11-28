@@ -17,7 +17,7 @@
                            $ctrl.error.isVisible ||
                            $ctrl.submitting.isVisible">
         <span>
-          {{ $ctrl.favorite.data.collectionId ? $ctrl.getCollectionNameById($ctrl.favorite.data.collectionId ) : 'Save to collection'}}
+          {{ $ctrl.favorite.data.collectionId ? 'Saved to ' + $ctrl.getCollectionNameById($ctrl.favorite.data.collectionId) : 'Save to collection'}}
         </span>
       </button>
       <button class="btn btn-text saved-card-favorite-button"
