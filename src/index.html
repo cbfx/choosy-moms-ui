@@ -14,11 +14,21 @@
     <nav class="navbar navbar-static-top">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">
-            <span ng-attr-title="{{ $ctrl.appName }}" class="brand-logo"></span>
+          <a class="navbar-brand" href="/">
+            <span ng-attr-title="{{ $ctrl.appName }}"
+                  class="brand-logo">
+            </span>
           </a>
         </div>
         <div id="navbar">
+          <ul class="nav navbar-nav">
+            <li ng-repeat="route in $ctrl.routes">
+              <a ng-attr-href="{{ route.path }}">
+                <i class="fa text-muted" ng-class="route.icon"></i>
+                <span>{{ ::route.name }}</span>
+              </a>
+            </li>
+          </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
               <auth-badge></auth-badge>

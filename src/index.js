@@ -28,6 +28,19 @@ appDependencies.push(savedListModule.name);
 angular.module(`${config.NAMESPACE}`, appDependencies)
   .controller('appCtrl', function() {
     this.appName = config.TITLE;
+    this.routes = [
+      {
+        name: 'Search',
+        path: '/search',
+        icon: 'fa-search'
+      },
+      {
+        name: 'Favorites',
+        path: '/favorites',
+        icon: 'fa-bookmark'
+      }
+    ];
+
     return this;
   })
   .constant('DATE_FORMAT_STRING', DATE_FORMAT_STRING)
