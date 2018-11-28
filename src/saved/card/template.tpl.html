@@ -1,7 +1,7 @@
 <div class="saved-card-container">
   <div class="saved-card-body">
-    <a ng-attr-href="{{$ctrl.gif.url}}" target="_blank">
-      <img ng-attr-src="{{$ctrl.gif.images.fixed_height_small.url}}" />
+    <a ng-attr-href="{{$ctrl.gifUrl}}" target="_blank">
+      <img ng-attr-src="{{$ctrl.gifPreviewUrl}}" />
     </a>
   </div>
   <div class="saved-card-footer text-right">
@@ -44,7 +44,7 @@
     <div class="arrow"></div>
     <div class="popover-content">
       <collections-card data-user-id="$ctrl.userId"
-                        data-gif-id="$ctrl.gif.id"
+                        data-gif-id="$ctrl.gifId"
                         data-collections="$ctrl.collections"
                         data-collection-id="$ctrl.favorite.data.collectionId"
                         data-on-success="$hide(); $ctrl.favorite.set(res.data)">

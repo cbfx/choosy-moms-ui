@@ -36,9 +36,9 @@ export default function(SavedAPIDataService, authManager) {
     this.submitting.isVisible = true;
 
     return SavedAPIDataService.save({
-      gifId: this.gif.id,
-      gifUrl: this.gif.url,
-      gifPreviewUrl: this.gif.images.fixed_height_small.url,
+      gifId: this.gifId,
+      gifUrl: this.gifUrl,
+      gifPreviewUrl: this.gifPreviewUrl,
       collectionId: null
     }).$promise
       .then((res) => {
@@ -60,7 +60,7 @@ export default function(SavedAPIDataService, authManager) {
     this.favorite.reset();
 
     return SavedAPIDataService.delete({
-      gifId: this.gif.id
+      gifId: this.gifId
     }).$promise
       .then((res) => {
         return res;
@@ -85,7 +85,7 @@ export default function(SavedAPIDataService, authManager) {
 
     if (authManager.isAuthenticated()) {
       SavedAPIDataService.get({
-        gifId: this.gif.id
+        gifId: this.gifId
       }).$promise
         .then((res) => {
           if (res.data.items.length) {
